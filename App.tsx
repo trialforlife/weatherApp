@@ -46,12 +46,15 @@ const locationVinnitsya: location = {
   longitude: 28.439236844179426,
 };
 
+const token: string = '';
+
 const endPoint =
   'https://api.openweathermap.org/data/2.5/forecast?lat=' +
   locationVinnitsya.latitude +
   '&lon=' +
   locationVinnitsya.longitude +
-  '&units=metric&appid=78f2afe59555511e1c48e296bd7297d8';
+  '&units=metric&appid=' +
+  token;
 
 const getFormatedDateString = (date: Date): string => {
   const dd: number = date.getDate();
@@ -62,6 +65,23 @@ const getFormatedDateString = (date: Date): string => {
 };
 
 const ThemedCalendar = () => {
+  axios
+    .get(endPoint)
+    .then(result => {
+      console.log('result', result.data.list);
+      return result.data.list;
+    })
+    .then(weatherData => {
+      const todayInSeconds: number = Date.now() / 1000;
+      const currentWeather = weatherData.find((dataItem: {dt: number}) => {
+        return Math.abs(todayInSeconds - dataItem?.dt) < 3 * 3600;
+      });
+      console.log('currentWeather', currentWeather);
+      // get current weather
+      // group + by dates
+      // calculate average
+    });
+
   let today: Date = new Date();
   let maxDate: Date = new Date();
 
@@ -75,10 +95,6 @@ const ThemedCalendar = () => {
     console.log('date', date);
     setSelectedDate(date);
   }, []);
-
-  axios.get(endPoint).then(result => {
-    console.log('result', result.data.list);
-  });
 
   return (
     <DateSelectionCalendar
@@ -130,6 +146,11 @@ function App(): JSX.Element {
         barStyle={isDarkMode ? 'light-content' : 'dark-content'}
         backgroundColor={backgroundStyle.backgroundColor}
       />
+      <View>
+        <Text style={[styles.title, styles.highlight]}>
+          Weather in Vinnitsya
+        </Text>
+      </View>
       <ScrollView
         contentInsetAdjustmentBehavior="automatic"
         style={backgroundStyle}>
@@ -174,6 +195,11 @@ const styles = StyleSheet.create({
   },
   highlight: {
     fontWeight: '700',
+  },
+  title: {
+    textAlign: 'center',
+    paddingBottom: 10,
+    paddingTop: 5,
   },
 });
 
