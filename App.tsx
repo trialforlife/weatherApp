@@ -1,7 +1,5 @@
 import React from 'react';
-import {useSelector} from 'react-redux';
 
-import type {PropsWithChildren} from 'react';
 import {
   SafeAreaView,
   ScrollView,
@@ -12,48 +10,12 @@ import {
   View,
 } from 'react-native';
 
-import {
-  Colors,
-  DebugInstructions,
-  LearnMoreLinks,
-  ReloadInstructions,
-} from 'react-native/Libraries/NewAppScreen';
+import {Colors} from 'react-native/Libraries/NewAppScreen';
 
 import {Provider} from 'react-redux';
 import store from './_redux/store';
 import {fetchForecastsRequest} from './_redux/actions/forecastsActions/forecastsActions';
-import {RootState} from './_redux/reducers/rootReducer';
-import Calendar from './Calendar';
-
-type SectionProps = PropsWithChildren<{
-  title: string;
-}>;
-
-function Section({children, title}: SectionProps): JSX.Element {
-  const isDarkMode = useColorScheme() === 'dark';
-  return (
-    <View style={styles.sectionContainer}>
-      <Text
-        style={[
-          styles.sectionTitle,
-          {
-            color: isDarkMode ? Colors.white : Colors.black,
-          },
-        ]}>
-        {title}
-      </Text>
-      <Text
-        style={[
-          styles.sectionDescription,
-          {
-            color: isDarkMode ? Colors.light : Colors.dark,
-          },
-        ]}>
-        {children}
-      </Text>
-    </View>
-  );
-}
+import WeatherCalendar from './WeatherCalendar';
 
 function launchApp(): void {
   store.dispatch(fetchForecastsRequest());
@@ -62,11 +24,6 @@ function launchApp(): void {
 launchApp();
 
 function InnerApp(): JSX.Element {
-  const {pending, forecasts, error} = useSelector(
-    (state: RootState) => state.forecasts,
-  );
-  console.log('pending, forecasts, error', pending, forecasts, error);
-
   const isDarkMode = useColorScheme() === 'dark';
 
   const backgroundStyle = {
@@ -78,33 +35,17 @@ function InnerApp(): JSX.Element {
         barStyle={isDarkMode ? 'light-content' : 'dark-content'}
         backgroundColor={backgroundStyle.backgroundColor}
       />
-      <View>
-        <Text style={[styles.title, styles.highlight]}>
-          Weather in Vinnitsya
-        </Text>
-      </View>
       <ScrollView
         contentInsetAdjustmentBehavior="automatic"
         style={backgroundStyle}>
-        <Calendar />
         <View
           style={{
             backgroundColor: isDarkMode ? Colors.black : Colors.white,
           }}>
-          <Section title="Step One">
-            Edit <Text style={styles.highlight}>App.tsx</Text> to change this
-            screen and then come back to see your edits.
-          </Section>
-          <Section title="See Your Changes">
-            <ReloadInstructions />
-          </Section>
-          <Section title="Debug">
-            <DebugInstructions />
-          </Section>
-          <Section title="Learn More">
-            Read the docs to discover what to do next:
-          </Section>
-          <LearnMoreLinks />
+          <Text style={[styles.title, styles.highlight]}>
+            Weather in Vinnitsya
+          </Text>
+          <WeatherCalendar />
         </View>
       </ScrollView>
     </SafeAreaView>
