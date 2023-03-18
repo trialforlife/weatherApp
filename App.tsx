@@ -5,8 +5,9 @@
  * @format
  */
 
-import React from 'react';
-import {useState, useCallback} from 'react';
+import React, {useState, useEffect, useCallback} from 'react';
+import {useDispatch, useSelector} from 'react-redux';
+
 import type {PropsWithChildren} from 'react';
 import {
   SafeAreaView,
@@ -31,6 +32,10 @@ import {
   Theme,
 } from 'react-native-easy-calendar';
 import axios from 'axios';
+import {Provider} from 'react-redux';
+import store from './_redux/store';
+import {fetchPostsRequest} from './_redux/actions/postsActions/postsActions';
+import {RootState} from './_redux/reducers/rootReducer';
 
 type SectionProps = PropsWithChildren<{
   title: string;
@@ -46,7 +51,7 @@ const locationVinnitsya: location = {
   longitude: 28.439236844179426,
 };
 
-const token: string = '';
+const token: string = '78f2afe59555511e1c48e296bd7297d8';
 
 const endPoint =
   'https://api.openweathermap.org/data/2.5/forecast?lat=' +
@@ -133,13 +138,23 @@ function Section({children, title}: SectionProps): JSX.Element {
   );
 }
 
-function App(): JSX.Element {
+function launchApp(): void {
+  store.dispatch(fetchPostsRequest());
+}
+
+launchApp();
+
+function InnerApp(): JSX.Element {
+  const {pending, posts, error} = useSelector(
+    (state: RootState) => state.posts,
+  );
+  console.log('pending, posts, error', pending, posts, error);
+
   const isDarkMode = useColorScheme() === 'dark';
 
   const backgroundStyle = {
     backgroundColor: isDarkMode ? Colors.darker : Colors.lighter,
   };
-
   return (
     <SafeAreaView style={backgroundStyle}>
       <StatusBar
@@ -176,6 +191,14 @@ function App(): JSX.Element {
         </View>
       </ScrollView>
     </SafeAreaView>
+  );
+}
+
+function App(): JSX.Element {
+  return (
+    <Provider store={store}>
+      <InnerApp />
+    </Provider>
   );
 }
 
