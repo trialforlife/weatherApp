@@ -1,8 +1,8 @@
 import {combineReducers} from 'redux';
-import postReducer from './postsReducer/postsReducer';
+import forecastsReducer from './forecastsReducer/forecastsReducer';
 
 const rootReducer = combineReducers({
-  posts: postReducer,
+  forecasts: forecastsReducer,
 });
 
 export type RootState = ReturnType<typeof rootReducer>;

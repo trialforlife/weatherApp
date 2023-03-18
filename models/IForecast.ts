@@ -1,4 +1,4 @@
-export interface IPost {
+export interface IForecast {
   userId: number;
   id: number;
   title: string;

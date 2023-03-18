@@ -21,7 +21,7 @@ import {
 
 import {Provider} from 'react-redux';
 import store from './_redux/store';
-import {fetchPostsRequest} from './_redux/actions/postsActions/postsActions';
+import {fetchForecastsRequest} from './_redux/actions/forecastsActions/forecastsActions';
 import {RootState} from './_redux/reducers/rootReducer';
 import Calendar from './Calendar';
 
@@ -56,16 +56,16 @@ function Section({children, title}: SectionProps): JSX.Element {
 }
 
 function launchApp(): void {
-  store.dispatch(fetchPostsRequest());
+  store.dispatch(fetchForecastsRequest());
 }
 
 launchApp();
 
 function InnerApp(): JSX.Element {
-  const {pending, posts, error} = useSelector(
-    (state: RootState) => state.posts,
+  const {pending, forecasts, error} = useSelector(
+    (state: RootState) => state.forecasts,
   );
-  console.log('pending, posts, error', pending, posts, error);
+  console.log('pending, forecasts, error', pending, forecasts, error);
 
   const isDarkMode = useColorScheme() === 'dark';
 

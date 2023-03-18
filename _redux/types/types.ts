@@ -1,35 +1,35 @@
-import {IPost} from '../../models/IPost';
-import {postTypes} from '../Actiontypes/postsTypes';
+import {IForecast} from '../../models/IForecast';
+import {forecastTypes} from '../Actiontypes/forecastsTypes';
 
-export interface PostsState {
+export interface ForecastsState {
   pending: boolean;
-  posts: IPost[];
+  forecasts: IForecast[];
   error: string | null;
 }
 
-export interface FetchPostsSuccessPayload {
-  posts: IPost[];
+export interface FetchForecastsSuccessPayload {
+  forecasts: IForecast[];
 }
 
-export interface FetchPostsFailurePayload {
+export interface FetchForecastsFailurePayload {
   error: string;
 }
 
-export interface FetchPostsRequest {
-  type: typeof postTypes.FETCH_POST_REQUEST;
+export interface FetchForecastsRequest {
+  type: typeof forecastTypes.FETCH_FORECAST_REQUEST;
 }
 
-export type FetchPostsSuccess = {
-  type: typeof postTypes.FETCH_POST_SUCCESS;
-  payload: FetchPostsSuccessPayload;
+export type FetchForecastsSuccess = {
+  type: typeof forecastTypes.FETCH_FORECAST_SUCCESS;
+  payload: FetchForecastsSuccessPayload;
 };
 
-export type FetchPostsFailure = {
-  type: typeof postTypes.FETCH_POST_FAILURE;
-  payload: FetchPostsFailurePayload;
+export type FetchForecastsFailure = {
+  type: typeof forecastTypes.FETCH_FORECAST_FAILURE;
+  payload: FetchForecastsFailurePayload;
 };
 
-export type PostsActions =
-  | FetchPostsRequest
-  | FetchPostsSuccess
-  | FetchPostsFailure;
+export type ForecastsActions =
+  | FetchForecastsRequest
+  | FetchForecastsSuccess
+  | FetchForecastsFailure;
