@@ -9,6 +9,8 @@ import {
   useColorScheme,
   View,
 } from 'react-native';
+import {NavigationContainer} from '@react-navigation/native';
+import { createNativeStackNavigator } from '@react-navigation/native-stack';
 
 import {Colors} from 'react-native/Libraries/NewAppScreen';
 
@@ -52,10 +54,16 @@ function InnerApp(): JSX.Element {
   );
 }
 
+const Stack = createNativeStackNavigator();
+
 function App(): JSX.Element {
   return (
     <Provider store={store}>
-      <InnerApp />
+      <NavigationContainer>
+        <Stack.Navigator>
+          <Stack.Screen name="Home" component={InnerApp} />
+        </Stack.Navigator>
+      </NavigationContainer>
     </Provider>
   );
 }
