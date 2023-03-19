@@ -8,9 +8,10 @@ import {
   Text,
   useColorScheme,
   View,
+  Button,
 } from 'react-native';
 import {NavigationContainer} from '@react-navigation/native';
-import { createNativeStackNavigator } from '@react-navigation/native-stack';
+import {createNativeStackNavigator} from '@react-navigation/native-stack';
 
 import {Colors} from 'react-native/Libraries/NewAppScreen';
 
@@ -18,6 +19,7 @@ import {Provider} from 'react-redux';
 import store from './_redux/store';
 import {fetchForecastsRequest} from './_redux/actions/forecastsActions/forecastsActions';
 import WeatherCalendar from './WeatherCalendar';
+import WeekForecast from './WeekForecast';
 
 function launchApp(): void {
   store.dispatch(fetchForecastsRequest());
@@ -25,7 +27,7 @@ function launchApp(): void {
 
 launchApp();
 
-function InnerApp(): JSX.Element {
+function HomeScreen({navigation}): JSX.Element {
   const isDarkMode = useColorScheme() === 'dark';
 
   const backgroundStyle = {
@@ -44,9 +46,12 @@ function InnerApp(): JSX.Element {
           style={{
             backgroundColor: isDarkMode ? Colors.black : Colors.white,
           }}>
-          <Text style={[styles.title, styles.highlight]}>
-            Weather in Vinnitsya
-          </Text>
+          <Button
+            title="Open weekly forecast"
+            onPress={() => {
+              return navigation.push('WeekForecast');
+            }}
+          />
           <WeatherCalendar />
         </View>
       </ScrollView>
@@ -61,7 +66,16 @@ function App(): JSX.Element {
     <Provider store={store}>
       <NavigationContainer>
         <Stack.Navigator>
-          <Stack.Screen name="Home" component={InnerApp} />
+          <Stack.Screen
+            name="Home"
+            component={HomeScreen}
+            options={{title: 'Daily forecast, Vinnistya'}}
+          />
+          <Stack.Screen
+            name="WeekForecast"
+            component={WeekForecast}
+            options={{title: 'Weekly forecast, Vinnistya'}}
+          />
         </Stack.Navigator>
       </NavigationContainer>
     </Provider>
