@@ -7,7 +7,7 @@ import {
   DefaultTheme,
   Theme,
 } from 'react-native-easy-calendar';
-import {Text, View} from 'react-native';
+import {View} from 'react-native';
 import Section from './Section';
 
 const getFormatedDateString = (date: Date): string => {
@@ -28,40 +28,19 @@ const WeatherCalendar = () => {
   const maxDateString: string = getFormatedDateString(maxDate);
   const [selectedDate, setSelectedDate] = useState(currentDateString);
 
-  const {pending, forecasts, error} = useSelector(
-    (state: RootState) => state.forecasts,
-  );
-
-  const getCurrentForecasts = (date: string) => {
-    return forecasts.filter((item: IForecast) => {
-      let currentDateObj = new Date(date);
+  const currentForecasts = useSelector((state: RootState) => {
+    return state.forecasts.forecasts.filter((item: IForecast) => {
+      let currentDateObj = new Date(selectedDate);
       let itemDateObj = new Date(item.dt * 1000);
       return currentDateObj.getDate() === itemDateObj.getDate();
     });
-  };
-
-  const [currentForecasts, setCurrentForecats] = useState<IForecast[]>(
-    getCurrentForecasts(currentDateString),
-  );
-
-  const onSelectDate = (date: string) => {
-    console.log('date', date);
-    setSelectedDate(date);
-    setCurrentForecats(getCurrentForecasts(date));
-  };
-
-  console.log(
-    'pending, currentForecasts, error',
-    pending,
-    currentForecasts,
-    error,
-  );
+  });
 
   return (
     <View>
       <DateSelectionCalendar
         theme={CustomTheme}
-        onSelectDate={onSelectDate}
+        onSelectDate={setSelectedDate}
         selectedDate={selectedDate}
         minDate={currentDateString}
         maxDate={maxDateString}
@@ -71,7 +50,7 @@ const WeatherCalendar = () => {
           return (
             <Section
               title={
-                new Date(currentForecast.dt * 1000).getHours() + ' hour(s)'
+                new Date(currentForecast.dt * 1000).getHours() + ':00 hour(s)'
               }
               key={currentForecast.dt}>
               temp {currentForecast.main.temp} °C,{' '}
